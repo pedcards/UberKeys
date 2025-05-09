@@ -23,3 +23,6 @@ toggletheme()
 		}
 	}
 }
+
+#Include includes\
+#Include AutoCorrect.ahk
