@@ -580,7 +580,6 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::a la::à la ; In the manner of...
 ::ancien regime::Ancien Régime ; noun a political and social system that no longer governs (especially the system that existed in France before the French Revolution)
 :*:angstrom::Ångström ; noun a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron); used to specify wavelengths of electromagnetic radiation
-:*:anime::animé ; noun any of various resins or oleoresins; a hard copal derived from an African tree
 ::ao dai::ào dái  ; noun the traditional dress of Vietnamese women consisting of a tunic with long sleeves and panels front and back; the tunic is worn over trousers
 :*:apertif::apértif ; noun an alcoholic drink that is taken as an appetizer before a meal
 :*:applique::appliqué ; noun a decorative design made of one material sewn over another; verb sew on as a decoration
