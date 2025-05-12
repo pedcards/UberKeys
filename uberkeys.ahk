@@ -4,7 +4,9 @@
 #Requires AutoHotkey v2+
 
 +#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
-
+::@sch::terrence.chun@seattlechildrens.org
+::@gg::tchun47@gmail.com
+::@hh::docterry@hotmail.com
 
 ;#######################################################################################
 toggletheme()
