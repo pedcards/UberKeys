@@ -13,17 +13,11 @@
 toggletheme()
 {
 	path := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-	lightApps := "AppsUseLightTheme"
-	lightSystem := "SystemUsesLightTheme"
 
 	try {
-		if (RegRead(path, lightApps) = 0) {
-			RegWrite(1, "REG_DWORD", path, lightApps)
-			RegWrite(1, "REG_DWORD", path, lightSystem)
-		} else {
-			RegWrite(0, "REG_DWORD", path, lightApps)
-			RegWrite(0, "REG_DWORD", path, lightSystem)
-		}
+		light := (RegRead(path, "AppsUseLightTheme") = 0)								; 1 if starting at dark, 0 if starting at light
+		RegWrite(light, "REG_DWORD", path, "AppsUseLightTheme")
+		RegWrite(light, "REG_DWORD", path, "SystemUsesLightTheme")
 	}
 }
 
