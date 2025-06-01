@@ -1,4 +1,4 @@
-#SingleInstance
+﻿#SingleInstance
 #Requires AutoHotkey v2.0
 ;------------------------------------------------------------------------------
 ; CONTENTS
@@ -70,7 +70,7 @@ fix_consecutive_caps() {
 ; repopulated upon hotkey press. HotStrings will be appended (added) by the
 ; script at the bottom.Remove these comments as desired.
 ;------------------------------------------------------------------------------
-
+/*
 ;==Change=colors=as=desired========================
 GuiColor := "F0F8FF" ; "F0F8FF" is light blue
 FontColor := "003366" ; "003366" is dark blue
@@ -397,6 +397,7 @@ hhButtonCancel(*)
 { hh.Hide()
   A_Clipboard := ClipboardOld  ; Restore previous contents of clipboard.
 }
+*/
 
 ;######## Below parts are from original AutoCorrect 2007 ##################
 #Hotstring R  ; Set the default to be "raw mode" (might not actually be relied upon by anything yet).
