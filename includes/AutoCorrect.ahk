@@ -1,4 +1,4 @@
-﻿#SingleInstance
+#SingleInstance
 #Requires AutoHotkey v2.0
 ;------------------------------------------------------------------------------
 ; CONTENTS
@@ -27,7 +27,7 @@
 ; This version by forum user Ntepa. Updated 8-7-2023.
 ; https://www.autohotkey.com/boards/viewtopic.php?p=533067#p533067
 ;------------------------------------------------------------------------------
-
+/*
 fix_consecutive_caps()
 fix_consecutive_caps() {
     ; Hotstring only works if CapsLock is off.
@@ -55,6 +55,7 @@ fix_consecutive_caps() {
         }
     }
 }
+*/
 
 ;------------------------------------------------------------------------------
 ;       Hotstring Helper - Multi line
