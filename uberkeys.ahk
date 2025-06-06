@@ -4,10 +4,14 @@
 #Requires AutoHotkey v2+
 
 +#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
-::@sch::terrence.chun@seattlechildrens.org
-::@gg::tchun47@gmail.com
-::@hh::docterry@hotmail.com
-^CapsLock::changeCase()
+#CapsLock::changeCase()
+
+if FileExist(".\custom.ahk") {
+	loop read ".\custom.ahk" {
+		k := A_LoopReadLine
+		parseHotString(k)
+	}
+}
 
 ;#######################################################################################
 toggletheme()
@@ -79,5 +83,13 @@ changeCase()
 	}
 }
 
+parseHotString(str)
+{
+	a := StrX(str,"",2,0,"::",1,2)
+	b := StrX(str,"::",0,2,"",0,0)
+	Hotstring(a,b)
+}
+
 #Include includes\
+#Include strx2.ahk
 #Include AutoCorrect.ahk
