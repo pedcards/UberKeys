@@ -13,6 +13,11 @@ if FileExist(".\custom.ahk") {
 	}
 }
 
+A_IconTip := "UberKeys"
+tray := A_TrayMenu
+tray.Add()
+tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
+
 ;#######################################################################################
 toggletheme()
 {
