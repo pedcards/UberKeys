@@ -107,9 +107,40 @@ parseHotString(str)
 {
 	a := StrX(str,"",2,0,"::",1,2)
 	b := StrX(str,"::",0,2,"",0,0)
-	Hotstring(a,b)
+	return {a:a,b:b}
+}
+
+stringGUI() {
+	strGUI := Gui(,"UberKeys")
+	strGUI.OnEvent("Close",closeGUI)
+	strGUI.SetFont("bold")
+	strGUI.AddText("","Auto-correct Dictionary")
+	strGUI.SetFont("")
+	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly",["Shortcut","Expansion"])
+	
+	dict := getDictionary()
+	for val in dict
+	{
+		res := parseHotString(val)
+		strLV.Add("",res.a,res.b)
+	}
+
+	strGUI.Show
+
+	lvEdit := LVICE(strLV)
+
+	closeGUI(*) {
+		if (lvEdit.Changes.Length)
+		{
+			
+		}
+		strGUI.Destroy()
+
+	}
+
 }
 
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
+#Include LVICE.ahk
