@@ -6,17 +6,14 @@
 +#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
 #CapsLock::changeCase()
 
-if FileExist(".\custom.ahk") {
-	loop read ".\custom.ahk" {
-		k := A_LoopReadLine
-		parseHotString(k)
-	}
-}
-
 A_IconTip := "UberKeys"
 tray := A_TrayMenu
 tray.Add()
 tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
+
+dict := getDictionary()
+addKeys(dict)
+stringGUI()
 
 ;#######################################################################################
 toggletheme()
@@ -85,6 +82,24 @@ changeCase()
 		Send("^v")
 		Sleep(200)
 		A_Clipboard := clipSavedAll
+	}
+}
+
+getDictionary() {
+	res := []
+	if FileExist(".\custom.ahk") {
+		loop read ".\custom.ahk" {
+			res.Push(A_LoopReadLine)
+		}
+	}
+	return res
+}
+
+addKeys(dict) {
+	for val in dict
+	{
+		res := parseHotString(val)
+		Hotstring(res.a,res.b)
 	}
 }
 
