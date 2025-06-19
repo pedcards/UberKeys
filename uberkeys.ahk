@@ -117,6 +117,7 @@ stringGUI() {
 	strGUI.AddText("","Auto-correct Dictionary")
 	strGUI.SetFont("")
 	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly",["Shortcut","Expansion"])
+	strLV.OnEvent("DoubleClick",clickRow)
 	
 	dict := getDictionary()
 	for val in dict
@@ -128,6 +129,14 @@ stringGUI() {
 	strGUI.Show
 
 	lvEdit := LVICE(strLV)
+
+	clickRow(LV,rownum) {
+		if (rownum) {
+			return
+		}
+		strLV.Add()
+		strLV.Modify(strLV.GetCount(),"Select")
+	}
 
 	closeGUI(*) {
 		if (lvEdit.Changes.Length)
