@@ -122,7 +122,7 @@ stringEdit(*) {
 	strGUI.AddText("","Auto-correct Dictionary")
 	strGUI.SetFont("")
 	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Shortcut","Expansion"])
-	strLV.OnEvent("DoubleClick",clickRow)
+	strLV.OnEvent("Click",clickRow)
 	strLV.ModifyCol(1,5)
 	
 	dict := getDictionary()
