@@ -6,14 +6,8 @@
 +#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
 #CapsLock::changeCase()
 
-A_IconTip := "UberKeys"
-tray := A_TrayMenu
-tray.Add()
-tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
-
-dict := getDictionary()
-addKeys(dict)
-stringGUI()
+tray()
+loadKeys()
 
 ;#######################################################################################
 toggletheme()
@@ -95,7 +89,8 @@ getDictionary() {
 	return res
 }
 
-addKeys(dict) {
+loadKeys() {
+	dict := getDictionary()
 	for val in dict
 	{
 		res := parseHotString(val)
@@ -110,7 +105,17 @@ parseHotString(str)
 	return {a:a,b:b}
 }
 
-stringGUI() {
+tray() {
+	A_IconTip := "UberKeys"
+	tray := A_TrayMenu
+	tray.Add()
+	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
+	tray.Add("Edit hotstrings",stringEdit)
+	tray.Default := "Edit hotstrings"
+	tray.ClickCount := 1
+}
+
+stringEdit(*) {
 	strGUI := Gui(,"UberKeys")
 	strGUI.OnEvent("Close",closeGUI)
 	strGUI.SetFont("bold")
