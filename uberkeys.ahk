@@ -116,14 +116,15 @@ stringGUI() {
 	strGUI.SetFont("bold")
 	strGUI.AddText("","Auto-correct Dictionary")
 	strGUI.SetFont("")
-	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly",["Shortcut","Expansion"])
+	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Shortcut","Expansion"])
 	strLV.OnEvent("DoubleClick",clickRow)
+	strLV.ModifyCol(1,5)
 	
 	dict := getDictionary()
 	for val in dict
 	{
 		res := parseHotString(val)
-		strLV.Add("",res.a,res.b)
+		strLV.Add("","",res.a,res.b)
 	}
 
 	strGUI.Show
