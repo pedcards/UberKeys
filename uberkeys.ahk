@@ -131,10 +131,9 @@ stringEdit(*) {
 		res := parseHotString(val)
 		strLV.Add("","",res.a,res.b)
 	}
+	lvEdit := LVICE(strLV)
 
 	strGUI.Show
-
-	lvEdit := LVICE(strLV)
 
 	clickRow(LV,rownum) {
 		if (rownum) {
