@@ -146,21 +146,28 @@ stringEdit(*) {
 	closeGUI(*) {
 		if (lvEdit.Changes.Length)
 		{
-			res := ""
-			rows := strLV.GetCount() 
-			loop rows
-			{
-				t1 := strLV.GetText(A_Index,2)
-				t2 := strLV.GetText(A_Index,3)
-				if (t1="")&&(t2="") {
-					continue
-				} else {
-					res .= t1 "::" t2 "`n"
-				}
-			}
-			MsgBox(res)
+			res := buildOut()
+			FileDelete(".\custom.ahk")
+			FileAppend(res,".\custom.ahk")
 		}
+		loadKeys()
 		strGUI.Destroy()
+	}
+
+	buildOut() {
+		res := ""
+		rows := strLV.GetCount() 
+		loop rows
+		{
+			t1 := strLV.GetText(A_Index,2)
+			t2 := strLV.GetText(A_Index,3)
+			if (t1="")&&(t2="") {
+				continue
+			} else {
+				res .= t1 "::" t2 "`n"
+			}
+		}
+		return res
 	}
 
 }
