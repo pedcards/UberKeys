@@ -117,11 +117,13 @@ tray() {
 
 stringEdit(*) {
 	strGUI := Gui(,"UberKeys")
-	strGUI.OnEvent("Close",closeGUI)
-	strGUI.SetFont("bold")
-	strGUI.AddText("","Auto-correct Dictionary")
-	strGUI.SetFont("")
-	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Shortcut","Expansion"])
+	strGUI.MarginX := 10
+	strGUI.MarginY := 10
+	strGUI.OnEvent("Close",closeGUI,false)
+	strGUI.SetFont("bold s16")
+	strGUI.AddText("w500 Center","Auto-correct Dictionary")
+	strGUI.SetFont("Norm s12")
+	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly NoSortHdr",["",":Opts:Shortcut","Expansion"])
 	strLV.OnEvent("Click",clickRow)
 	strLV.ModifyCol(1,5)
 	
