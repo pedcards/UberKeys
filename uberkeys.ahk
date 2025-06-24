@@ -175,7 +175,12 @@ stringEdit(*) {
 			t2 := strLV.GetText(A_Index,3)
 			if (t1="")&&(t2="") {
 				continue
-			} else {
+			} 
+			else if (t1="")||(t2="") {
+				MsgBox("Line " A_Index " - " t1 t2 "`nMissing shortcut","ERROR","IconX")
+				return
+			} 
+			else {
 				res .= t1 "::" t2 "`n"
 			}
 		}
