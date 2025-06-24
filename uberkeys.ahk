@@ -153,9 +153,12 @@ stringEdit(*) {
 	}
 
 	closeGUI(*) {
-		if (lvEdit.Changes.Length)
+		if (strLV)
 		{
 			res := buildOut()
+			if (res="") {
+				return
+			}
 			FileDelete(".\custom.ahk")
 			FileAppend(res,".\custom.ahk")
 		}
