@@ -133,7 +133,6 @@ stringEdit(*) {
 		res := parseHotString(val)
 		strLV.Add("","",res.a,res.b)
 	}
-	lvEdit := LVICE(strLV)
 
 	strGUI.Show
 
@@ -171,10 +170,8 @@ stringEdit(*) {
 		}
 		return res
 	}
-
 }
 
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
-#Include LVICE.ahk
