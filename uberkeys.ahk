@@ -150,6 +150,46 @@ stringEdit(*) {
 		}
 	}
 
+	editRow(text1,text2) {
+		strGUI.Hide()
+
+		editGUI := Gui("AlwaysOnTop","UberKeys Edit")
+		editGUI.SetFont("s12 bold")
+		editGUI.AddText("",":Opt: + hotstring")
+		box1 := editGUI.AddEdit("w500",text1)
+		editGUI.AddText("","Replacement")
+		box2 := editGUI.AddEdit("w500 r2 +Wrap",text2)
+		btnSubmit := editGUI.AddButton("","Submit")
+		btnSubmit.OnEvent("Click",rowSubmit)
+		editGUI.OnEvent("Close",rowClose)
+		editGUI.Show()
+
+		WinWaitClose("UberKeys Edit")
+		if (box1.Value=text1)&&(box2.Value=text2) {									; no changes, returns blank
+			return ""
+		} else {
+			return [box1.Value,box2.Value]
+		}
+
+		rowSubmit(*) {
+			editGUI.Hide
+			val1 := box1.Value
+			val2 := box2.Value
+			if ((val1="::")||(val1="")) || (val2="") {								; either hotstring or replacement are blank
+				MsgBox("Missing value"
+					. "`nHotstring - " val1
+					. "`nReplacement - " val2
+					,"ERROR","IconX")
+				editGUI.Show
+				return
+			}
+
+
+		}
+		rowClose(*) {																; [x] cancels this rowedit, returns to strGUI
+			strGUI.Show
+			return ""
+		}
 	}
 
 	closeGUI(*) {
