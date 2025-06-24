@@ -137,10 +137,19 @@ stringEdit(*) {
 
 	clickRow(LV,rownum) {
 		if (rownum) {
+			text1 := strLV.GetText(rownum,2)
+			text2 := strLV.GetText(rownum,3)
+		} else {
+			text1 := "::"
+			text2 := ""
+		}
+		res := editRow(text1,text2)
+
+		if (res="") {																	; no changes
 			return
 		}
-		strLV.Add()
-		strLV.Modify(strLV.GetCount(),"Select")
+	}
+
 	}
 
 	closeGUI(*) {
