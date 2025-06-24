@@ -100,9 +100,8 @@ loadKeys() {
 
 parseHotString(str)
 {
-	a := StrX(str,"",2,0,"::",1,2)
-	b := StrX(str,"::",0,2,"",0,0)
-	return {a:a,b:b}
+	RegExMatch(str,"(.*?)::(?!.*::)(.*?)$",&n)
+	return {a:n[1],b:n[2]}
 }
 
 tray() {
