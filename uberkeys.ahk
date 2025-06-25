@@ -206,8 +206,26 @@ stringEdit(*) {
 				rowGUI.Show
 				return
 			}
-			rowGUI.Submit
-			return
+			RegExMatch(val1,"^:(.*?):",&chk)
+			if (chk="") {
+				rowGUI.Hide
+				MsgBox("Syntax error"
+					. "`nHotstring - " val1
+					,"ERROR","IconX")
+				rowGUI.Show
+				return
+			}
+			if (chk[0]="::")||(chk[1]~="[*]") {
+				rowGUI.Submit
+				return
+			} else {
+				rowGUI.Hide
+				MsgBox("Syntax error"
+					. "`nHotstring - " val1
+					,"ERROR","IconX")
+				rowGUI.Show
+				return
+			}
 		}
 		rowClose(*) {																; on [x] restore original values
 			box1.Value := text1
