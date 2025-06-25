@@ -144,9 +144,19 @@ stringEdit(*) {
 			res := editRow("::","")
 		}
 
+		strGUI.Show()
 
+		if (res="X") {
+			strLV.Delete(rownum)
+			return
+		}
 		if (res="") {																	; no changes
 			return
+		}
+		if (rownum) {																	; replace prior values
+			strLV.Modify(rownum,"","",res[1],res[2])
+		} else {																		; add new row with values
+			strLV.Add("","",res[1],res[2])
 		}
 	}
 
