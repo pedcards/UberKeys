@@ -215,6 +215,11 @@ stringEdit(*) {
 			rowGUI.closed := true
 		}
 
+		rowDelete(*) {
+			rowGUI.delete := true
+			rowGUI.Submit
+			return
+		}
 	}
 
 	closeGUI(*) {
