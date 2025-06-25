@@ -209,10 +209,12 @@ stringEdit(*) {
 			rowGUI.Submit
 			return
 		}
-		rowClose(*) {																; [x] cancels this rowedit, returns to strGUI
-			strGUI.Show
-			return ""
+		rowClose(*) {																; on [x] restore original values
+			box1.Value := text1
+			box2.Value := text2
+			rowGUI.closed := true
 		}
+
 	}
 
 	closeGUI(*) {
