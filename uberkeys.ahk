@@ -195,19 +195,19 @@ stringEdit(*) {
 		}
 
 		rowSubmit(*) {
-			editGUI.Hide
 			val1 := box1.Value
 			val2 := box2.Value
-			if ((val1="::")||(val1="")) || (val2="") {								; either hotstring or replacement are blank
+			if ((val1="::")||(val1="")) || (val2="") {								; either hotstring or replacement are blank, continue editing
+				rowGUI.Hide
 				MsgBox("Missing value"
 					. "`nHotstring - " val1
 					. "`nReplacement - " val2
 					,"ERROR","IconX")
-				editGUI.Show
+				rowGUI.Show
 				return
 			}
-
-
+			rowGUI.Submit
+			return
 		}
 		rowClose(*) {																; [x] cancels this rowedit, returns to strGUI
 			strGUI.Show
