@@ -161,20 +161,33 @@ stringEdit(*) {
 	}
 
 	editRow(text1,text2) {
-		strGUI.Hide()
-
-		editGUI := Gui("AlwaysOnTop","UberKeys Edit")
-		editGUI.SetFont("s12 bold")
-		editGUI.AddText("",":Opt: + hotstring")
-		box1 := editGUI.AddEdit("w500",text1)
-		editGUI.AddText("","Replacement")
-		box2 := editGUI.AddEdit("w500 r2 +Wrap",text2)
-		btnSubmit := editGUI.AddButton("","Submit")
+		rowGUI := Gui("AlwaysOnTop","UberKeys Row Edit")
+		rowGUI.SetFont("s12 bold")
+		rowGUI.delete := false
+		rowGUI.closed := false
+		
+		rowGUI.AddText("",":Opt: + hotstring")
+		box1 := rowGUI.AddEdit("w500",text1)
+		
+		rowGUI.AddText("","Replacement")
+		box2 := rowGUI.AddEdit("w500 r2 +Wrap",text2)
+		
+		btnSubmit := rowGUI.AddButton("","Submit")
 		btnSubmit.OnEvent("Click",rowSubmit)
-		editGUI.OnEvent("Close",rowClose)
-		editGUI.Show()
 
-		WinWaitClose("UberKeys Edit")
+		btnDelete := rowGUI.AddButton("yP x150","Delete")
+		btnDelete.OnEvent("Click",rowDelete)
+
+		rowGUI.OnEvent("Close",rowClose)
+		rowGUI.Show()
+
+		WinWaitClose("UberKeys Row Edit")
+		if (rowGUI.delete=true) {
+			return "X"
+		}
+		if (rowGUI.closed=true) {
+			return ""
+		}
 		if (box1.Value=text1)&&(box2.Value=text2) {									; no changes, returns blank
 			return ""
 		} else {
