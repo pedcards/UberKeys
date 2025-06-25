@@ -136,14 +136,14 @@ stringEdit(*) {
 	strGUI.Show
 
 	clickRow(LV,rownum) {
+		strGUI.Hide()
+
 		if (rownum) {
-			text1 := strLV.GetText(rownum,2)
-			text2 := strLV.GetText(rownum,3)
+			res := editRow(strLV.GetText(rownum,2),strLV.GetText(rownum,3))
 		} else {
-			text1 := "::"
-			text2 := ""
+			res := editRow("::","")
 		}
-		res := editRow(text1,text2)
+
 
 		if (res="") {																	; no changes
 			return
