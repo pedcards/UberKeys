@@ -7,6 +7,7 @@
 #CapsLock::changeCase()
 
 tray()
+dPath := findDictionary()
 loadKeys()
 
 ;#######################################################################################
@@ -115,8 +116,8 @@ findDictionary() {
 
 getDictionary() {
 	res := []
-	if FileExist(".\custom.ahk") {
-		loop read ".\custom.ahk" {
+	if FileExist(dPath) {
+		loop read dPath {
 			res.Push(A_LoopReadLine)
 		}
 	}
@@ -281,8 +282,8 @@ stringEdit(*) {
 			if (res="") {
 				return
 			}
-			FileDelete(".\custom.ahk")
-			FileAppend(res,".\custom.ahk")
+			try FileDelete(dPath)
+			FileAppend(res,dPath)
 		}
 		loadKeys()
 		strGUI.Destroy()
