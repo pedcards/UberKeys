@@ -79,6 +79,40 @@ changeCase()
 	}
 }
 
+findDictionary() {
+	fname := "uberkeys-custom.ahk"
+	paths := [A_MyDocuments "\..\OneDrive - SCH"
+			, A_MyDocuments "\..\OneDrive"
+			, A_ScriptDir]
+
+	for path in paths
+	{
+		check := path "\" fname
+		if FileExist(check) {
+			return check
+		}
+	}
+
+	dgui := Gui(,"Store auto-correct dictionary")
+	dgui.AddText(,"Select path to store auto-correct dictionary:")
+	dbut := [1,2,3]
+	for path in paths
+	{
+		dbut[A_Index] := dgui.AddButton(,path)
+		dbut[A_Index].OnEvent("Click",res:=dbutpress)
+	}
+	dgui.Show
+
+	WinWaitClose("Store auto-correct dictionary")
+	dgui.Destroy
+	return res "\" fname
+
+	dbutpress(x,*) {
+		res := x.text
+		dgui.Submit
+	}
+}
+
 getDictionary() {
 	res := []
 	if FileExist(".\custom.ahk") {
