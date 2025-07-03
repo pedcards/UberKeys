@@ -146,7 +146,6 @@ tray() {
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
 	tray.Add("Edit hotstrings",stringEdit)
 	tray.Default := "Edit hotstrings"
-	tray.ClickCount := 1
 }
 
 stringEdit(*) {
