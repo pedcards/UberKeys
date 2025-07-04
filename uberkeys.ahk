@@ -311,8 +311,8 @@ stringEdit(*) {
 			return
 		}
 		rowClose(*) {																; on [x] restore original values
-			box1.Value := text1
-			box2.Value := text2
+			box1.Value := textStr
+			box2.Value := textRep
 			rowGUI.closed := true
 		}
 
