@@ -132,14 +132,14 @@ loadKeys() {
 	for val in dict
 	{
 		res := parseHotString(val)
-		Hotstring(res.a,res.b)
+		Hotstring(res.a res.b,res.c)
 	}
 }
 
 parseHotString(str)
 {
-	RegExMatch(str,"(.*?)::(?!.*::)(.*?)$",&n)
-	return {a:n[1],b:n[2]}
+	RegExMatch(str,"^(:.*?:)(.*?)::(.*?)$",&n)
+	return {a:n[1],b:n[2],c:n[3]}
 }
 
 tray() {
@@ -170,7 +170,11 @@ stringEdit(*) {
 	for val in dict
 	{
 		res := parseHotString(val)
-		strLV.Add("","",res.a,res.b)
+		strLV.Add("",""
+			,res.a
+			,res.b
+			,res.c
+		)
 	}
 
 	strGUI.Show
