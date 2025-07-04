@@ -157,11 +157,14 @@ stringEdit(*) {
 	strGUI.MarginY := 10
 	strGUI.OnEvent("Close",closeGUI)
 	strGUI.SetFont("bold s16")
-	strGUI.AddText("w500 Center","Auto-correct Dictionary")
+	strGUI.AddText("w600 Center","Auto-correct Dictionary")
 	strGUI.SetFont("Norm s12")
-	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly NoSortHdr",["",":Opts:Shortcut","Expansion"])
+	strLV := strGUI.AddListView("w600 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Opts","Shortcut","Expansion"])
 	strLV.OnEvent("DoubleClick",clickRow)
 	strLV.ModifyCol(1,5)
+	strLV.ModifyCol(2,"Center")
+	strLV.ModifyCol(3,120)
+	strLV.ModifyCol(4,430)
 	
 	dict := getDictionary()
 	for val in dict
