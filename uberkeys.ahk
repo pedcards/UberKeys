@@ -202,6 +202,8 @@ stringEdit(*) {
 		} else {																		; add new row with values
 			strLV.Add("","",res[1],res[2],res[3])
 		}
+		saveKeys()
+		loadKeys()
 	}
 
 	editRow(textOpt,textStr,textRep) {
@@ -324,17 +326,16 @@ stringEdit(*) {
 	}
 
 	closeGUI(*) {
-		if (strLV)
-		{
-			res := buildOut()
-			if (res="") {
-				return
-			}
-			try FileDelete(dPath)
-			FileAppend(res,dPath)
-		}
-		loadKeys()
 		strGUI.Destroy()
+	}
+
+	saveKeys() {
+		res := buildOut()
+		if (res="") {
+			return
+		}
+		try FileDelete(dPath)
+		FileAppend(res,dPath)
 	}
 
 	buildOut() {
