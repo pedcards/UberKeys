@@ -238,6 +238,7 @@ stringEdit(*) {
 		rowGUI.Show()
 
 		WinWaitClose("UberKeys Row Edit")
+		optParse(opt)
 		if (rowGUI.delete=true) {
 			return "X"
 		}
@@ -248,6 +249,50 @@ stringEdit(*) {
 			return ""
 		} else {
 			return [opt.res,box1.Value,box2.Value]
+		}
+
+		optParse(var,*) {
+			if IsObject(var) {
+				res := ""
+				if (opt.Endchar.Value=true) {
+					res .= "*"
+				}
+				if (opt.Immediate.Value=true) {
+					res .= "?"
+				}
+				if (opt.Backspacing.Value=true) {
+					res .="b0"
+				}
+				if (opt.CaseSensitive.Value=true) {
+					res .= "C"
+				}
+				if (opt.CaseConforming.Value=true) {
+					res .= "C1"
+				}
+				if (opt.OmitEnding.Value=true) {
+					res .= "O"
+				}
+				opt.res := ":" res ":"
+			} else {
+				if InStr(var,"*") {
+					opt.Endchar.Value := true
+				}
+				if InStr(var,"?") {
+					opt.Immediate.Value := true
+				}
+				if InStr(var,"b0") {
+					opt.Backspacing.Value := true
+				}
+				if InStr(var,"C") {
+					opt.CaseSensitive.Value := true
+				}
+				if InStr(var,"C1") {
+					opt.CaseConforming.Value := true
+				}
+				if InStr(var,"O") {
+					opt.OmitEnding.Value := true
+				}
+			}
 		}
 
 		rowSubmit(*) {
