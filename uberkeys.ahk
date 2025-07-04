@@ -85,6 +85,9 @@ findDictionary() {
 	paths := [A_MyDocuments "\..\OneDrive - SCH"
 			, A_MyDocuments "\..\OneDrive"
 			, A_ScriptDir]
+	if InStr(A_ScriptDir,"AhkProjects") {
+		paths := [A_ScriptDir]
+	}
 
 	for path in paths
 	{
