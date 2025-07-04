@@ -344,10 +344,11 @@ stringEdit(*) {
 		{
 			t1 := strLV.GetText(A_Index,2)
 			t2 := strLV.GetText(A_Index,3)
-			if (t1="")&&(t2="") {
+			t3 := strLV.GetText(A_Index,4)
+			if (t2="")&&(t3="") {
 				continue
 			} 
-			res .= t1 "::" t2 "`n"
+			res .= t1 t2 "::" t3 "`n"
 		}
 		return res
 	}
