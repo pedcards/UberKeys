@@ -319,9 +319,15 @@ stringEdit(*) {
 		}
 
 		rowDelete(*) {
-			rowGUI.delete := true
-			rowGUI.Submit
-			return
+			ok := MsgBox("Are you sure you want to delete this hotkey?","Confirmation","OKCancel IconX 0x1000")
+			if (ok="OK") {
+				rowGUI.delete := true
+				rowGUI.Submit
+				return
+			} else {
+				rowGUI.Show
+				return
+			}
 		}
 	}
 
