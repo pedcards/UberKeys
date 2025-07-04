@@ -7,6 +7,7 @@
 #CapsLock::changeCase()
 
 tray()
+dPath := findDictionary()
 loadKeys()
 
 ;#######################################################################################
@@ -79,10 +80,47 @@ changeCase()
 	}
 }
 
+findDictionary() {
+	fname := "uberkeys-custom.ahk"
+	paths := [A_MyDocuments "\..\OneDrive - SCH"
+			, A_MyDocuments "\..\OneDrive"
+			, A_ScriptDir]
+	if InStr(A_ScriptDir,"AhkProjects") {
+		paths := [A_ScriptDir]
+	}
+
+	for path in paths
+	{
+		check := path "\" fname
+		if FileExist(check) {
+			return check
+		}
+	}
+
+	dgui := Gui(,"Store auto-correct dictionary")
+	dgui.AddText(,"Select path to store auto-correct dictionary:")
+	dbut := [1,2,3]
+	for path in paths
+	{
+		dbut[A_Index] := dgui.AddButton(,path)
+		dbut[A_Index].OnEvent("Click",res:=dbutpress)
+	}
+	dgui.Show
+
+	WinWaitClose("Store auto-correct dictionary")
+	dgui.Destroy
+	return res "\" fname
+
+	dbutpress(x,*) {
+		res := x.text
+		dgui.Submit
+	}
+}
+
 getDictionary() {
 	res := []
-	if FileExist(".\custom.ahk") {
-		loop read ".\custom.ahk" {
+	if FileExist(dPath) {
+		loop read dPath {
 			res.Push(A_LoopReadLine)
 		}
 	}
@@ -94,14 +132,14 @@ loadKeys() {
 	for val in dict
 	{
 		res := parseHotString(val)
-		Hotstring(res.a,res.b)
+		Hotstring(res.a res.b,res.c)
 	}
 }
 
 parseHotString(str)
 {
-	RegExMatch(str,"(.*?)::(?!.*::)(.*?)$",&n)
-	return {a:n[1],b:n[2]}
+	RegExMatch(str,"^(:.*?:)(.*?)::(.*?)$",&n)
+	return {a:n[1],b:n[2],c:n[3]}
 }
 
 tray() {
@@ -111,7 +149,6 @@ tray() {
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
 	tray.Add("Edit hotstrings",stringEdit)
 	tray.Default := "Edit hotstrings"
-	tray.ClickCount := 1
 }
 
 stringEdit(*) {
@@ -120,17 +157,24 @@ stringEdit(*) {
 	strGUI.MarginY := 10
 	strGUI.OnEvent("Close",closeGUI)
 	strGUI.SetFont("bold s16")
-	strGUI.AddText("w500 Center","Auto-correct Dictionary")
+	strGUI.AddText("w600 Center","Auto-correct Dictionary")
 	strGUI.SetFont("Norm s12")
-	strLV := strGUI.AddListView("w500 h200 Grid +Hdr -ReadOnly NoSortHdr",["",":Opts:Shortcut","Expansion"])
+	strLV := strGUI.AddListView("w600 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Opts","Shortcut","Expansion"])
 	strLV.OnEvent("DoubleClick",clickRow)
 	strLV.ModifyCol(1,5)
+	strLV.ModifyCol(2,"Center")
+	strLV.ModifyCol(3,120)
+	strLV.ModifyCol(4,430)
 	
 	dict := getDictionary()
 	for val in dict
 	{
 		res := parseHotString(val)
-		strLV.Add("","",res.a,res.b)
+		strLV.Add("",""
+			,res.a
+			,res.b
+			,res.c
+		)
 	}
 
 	strGUI.Show
@@ -139,9 +183,9 @@ stringEdit(*) {
 		strGUI.Hide()
 
 		if (rownum) {
-			res := editRow(strLV.GetText(rownum,2),strLV.GetText(rownum,3))
+			res := editRow(strLV.GetText(rownum,2),strLV.GetText(rownum,3),strLV.GetText(rownum,4))
 		} else {
-			res := editRow("::","")
+			res := editRow("::","","")
 		}
 
 		strGUI.Show()
@@ -154,23 +198,37 @@ stringEdit(*) {
 			return
 		}
 		if (rownum) {																	; replace prior values
-			strLV.Modify(rownum,"","",res[1],res[2])
+			strLV.Modify(rownum,"","",res[1],res[2],res[3])
 		} else {																		; add new row with values
-			strLV.Add("","",res[1],res[2])
+			strLV.Add("","",res[1],res[2],res[3])
 		}
+		saveKeys()
+		loadKeys()
 	}
 
-	editRow(text1,text2) {
+	editRow(textOpt,textStr,textRep) {
 		rowGUI := Gui("AlwaysOnTop","UberKeys Row Edit")
 		rowGUI.SetFont("s12 bold")
 		rowGUI.delete := false
 		rowGUI.closed := false
+		opt := []
 		
-		rowGUI.AddText("",":Opt: + hotstring")
-		box1 := rowGUI.AddEdit("w500",text1)
+		rowGUI.AddText("","Options")
+		rowGUI.SetFont("norm s10")
+		opt.Endchar := rowGUI.AddCheckbox("section","End Char not required")
+		opt.Immediate := rowGUI.AddCheckbox("","Replace immediately")
+		opt.Backspacing := rowGUI.AddCheckbox("","Don't backspace")
+		opt.CaseSensitive := rowGUI.AddCheckbox("ys xs+250","Case sensitive")
+		opt.CaseConforming := rowGUI.AddCheckbox("","Case conforming")
+		opt.OmitEnding := rowGUI.AddCheckbox("","Omit ending char")
+		optParse(textOpt)
+
+		rowGUI.SetFont("s12 bold")
+		rowGUI.AddText("xm w250","`nHotstring")
+		box1 := rowGUI.AddEdit("w500",textStr)
 		
-		rowGUI.AddText("","Replacement")
-		box2 := rowGUI.AddEdit("w500 r2 +Wrap",text2)
+		rowGUI.AddText("","`nReplacement")
+		box2 := rowGUI.AddEdit("w500 r3 +Wrap",textRep)
 		
 		btnSubmit := rowGUI.AddButton("","Submit")
 		btnSubmit.OnEvent("Click",rowSubmit)
@@ -182,22 +240,67 @@ stringEdit(*) {
 		rowGUI.Show()
 
 		WinWaitClose("UberKeys Row Edit")
+		optParse(opt)
 		if (rowGUI.delete=true) {
 			return "X"
 		}
 		if (rowGUI.closed=true) {
 			return ""
 		}
-		if (box1.Value=text1)&&(box2.Value=text2) {									; no changes, returns blank
+		if (opt.res=textOpt)&&(box1.Value=textStr)&&(box2.Value=textRep) {				; no changes, returns blank
 			return ""
 		} else {
-			return [box1.Value,box2.Value]
+			return [opt.res,box1.Value,box2.Value]
+		}
+
+		optParse(var,*) {
+			if IsObject(var) {
+				res := ""
+				if (opt.Endchar.Value=true) {
+					res .= "*"
+				}
+				if (opt.Immediate.Value=true) {
+					res .= "?"
+				}
+				if (opt.Backspacing.Value=true) {
+					res .="b0"
+				}
+				if (opt.CaseSensitive.Value=true) {
+					res .= "C"
+				}
+				if (opt.CaseConforming.Value=true) {
+					res .= "C1"
+				}
+				if (opt.OmitEnding.Value=true) {
+					res .= "O"
+				}
+				opt.res := ":" res ":"
+			} else {
+				if InStr(var,"*") {
+					opt.Endchar.Value := true
+				}
+				if InStr(var,"?") {
+					opt.Immediate.Value := true
+				}
+				if InStr(var,"b0") {
+					opt.Backspacing.Value := true
+				}
+				if InStr(var,"C") {
+					opt.CaseSensitive.Value := true
+				}
+				if InStr(var,"C1") {
+					opt.CaseConforming.Value := true
+				}
+				if InStr(var,"O") {
+					opt.OmitEnding.Value := true
+				}
+			}
 		}
 
 		rowSubmit(*) {
 			val1 := box1.Value
 			val2 := box2.Value
-			if ((val1="::")||(val1="")) || (val2="") {								; either hotstring or replacement are blank, continue editing
+			if ((val1=""))||(val2="") {													; either hotstring or replacement are blank, continue editing
 				rowGUI.Hide
 				MsgBox("Missing value"
 					. "`nHotstring - " val1
@@ -206,52 +309,39 @@ stringEdit(*) {
 				rowGUI.Show
 				return
 			}
-			RegExMatch(val1,"^:(.*?):",&chk)
-			if (chk="") {
-				rowGUI.Hide
-				MsgBox("Syntax error"
-					. "`nHotstring - " val1
-					,"ERROR","IconX")
-				rowGUI.Show
-				return
-			}
-			if (chk[0]="::")||(chk[1]~="[*]") {
-				rowGUI.Submit
-				return
-			} else {
-				rowGUI.Hide
-				MsgBox("Syntax error"
-					. "`nHotstring - " val1
-					,"ERROR","IconX")
-				rowGUI.Show
-				return
-			}
+			rowGUI.Submit
+			return
 		}
 		rowClose(*) {																; on [x] restore original values
-			box1.Value := text1
-			box2.Value := text2
+			box1.Value := textStr
+			box2.Value := textRep
 			rowGUI.closed := true
 		}
 
 		rowDelete(*) {
-			rowGUI.delete := true
-			rowGUI.Submit
-			return
+			ok := MsgBox("Are you sure you want to delete this hotkey?","Confirmation","OKCancel IconX 0x1000")
+			if (ok="OK") {
+				rowGUI.delete := true
+				rowGUI.Submit
+				return
+			} else {
+				rowGUI.Show
+				return
+			}
 		}
 	}
 
 	closeGUI(*) {
-		if (strLV)
-		{
-			res := buildOut()
-			if (res="") {
-				return
-			}
-			FileDelete(".\custom.ahk")
-			FileAppend(res,".\custom.ahk")
-		}
-		loadKeys()
 		strGUI.Destroy()
+	}
+
+	saveKeys() {
+		res := buildOut()
+		if (res="") {
+			return
+		}
+		try FileDelete(dPath)
+		FileAppend(res,dPath)
 	}
 
 	buildOut() {
@@ -261,10 +351,11 @@ stringEdit(*) {
 		{
 			t1 := strLV.GetText(A_Index,2)
 			t2 := strLV.GetText(A_Index,3)
-			if (t1="")&&(t2="") {
+			t3 := strLV.GetText(A_Index,4)
+			if (t2="")&&(t3="") {
 				continue
 			} 
-			res .= t1 "::" t2 "`n"
+			res .= t1 t2 "::" t3 "`n"
 		}
 		return res
 	}
