@@ -298,7 +298,7 @@ stringEdit(*) {
 		rowSubmit(*) {
 			val1 := box1.Value
 			val2 := box2.Value
-			if ((val1="::")||(val1="")) || (val2="") {								; either hotstring or replacement are blank, continue editing
+			if ((val1=""))||(val2="") {													; either hotstring or replacement are blank, continue editing
 				rowGUI.Hide
 				MsgBox("Missing value"
 					. "`nHotstring - " val1
@@ -307,26 +307,8 @@ stringEdit(*) {
 				rowGUI.Show
 				return
 			}
-			RegExMatch(val1,"^:(.*?):",&chk)
-			if (chk="") {
-				rowGUI.Hide
-				MsgBox("Syntax error"
-					. "`nHotstring - " val1
-					,"ERROR","IconX")
-				rowGUI.Show
-				return
-			}
-			if (chk[0]="::")||(chk[1]~="[*]") {
-				rowGUI.Submit
-				return
-			} else {
-				rowGUI.Hide
-				MsgBox("Syntax error"
-					. "`nHotstring - " val1
-					,"ERROR","IconX")
-				rowGUI.Show
-				return
-			}
+			rowGUI.Submit
+			return
 		}
 		rowClose(*) {																; on [x] restore original values
 			box1.Value := text1
