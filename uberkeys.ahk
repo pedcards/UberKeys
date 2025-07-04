@@ -179,9 +179,9 @@ stringEdit(*) {
 		strGUI.Hide()
 
 		if (rownum) {
-			res := editRow(strLV.GetText(rownum,2),strLV.GetText(rownum,3))
+			res := editRow(strLV.GetText(rownum,2),strLV.GetText(rownum,3),strLV.GetText(rownum,4))
 		} else {
-			res := editRow("::","")
+			res := editRow("::","","")
 		}
 
 		strGUI.Show()
@@ -194,9 +194,9 @@ stringEdit(*) {
 			return
 		}
 		if (rownum) {																	; replace prior values
-			strLV.Modify(rownum,"","",res[1],res[2])
+			strLV.Modify(rownum,"","",res[1],res[2],res[3])
 		} else {																		; add new row with values
-			strLV.Add("","",res[1],res[2])
+			strLV.Add("","",res[1],res[2],res[3])
 		}
 	}
 
