@@ -204,17 +204,29 @@ stringEdit(*) {
 		}
 	}
 
-	editRow(text1,text2) {
+	editRow(textOpt,textStr,textRep) {
 		rowGUI := Gui("AlwaysOnTop","UberKeys Row Edit")
 		rowGUI.SetFont("s12 bold")
 		rowGUI.delete := false
 		rowGUI.closed := false
+		opt := []
 		
-		rowGUI.AddText("",":Opt: + hotstring")
-		box1 := rowGUI.AddEdit("w500",text1)
+		rowGUI.AddText("","Options")
+		rowGUI.SetFont("norm s10")
+		opt.Endchar := rowGUI.AddCheckbox("section","End Char not required")
+		opt.Immediate := rowGUI.AddCheckbox("","Replace immediately")
+		opt.Backspacing := rowGUI.AddCheckbox("","Don't backspace")
+		opt.CaseSensitive := rowGUI.AddCheckbox("ys xs+250","Case sensitive")
+		opt.CaseConforming := rowGUI.AddCheckbox("","Case conforming")
+		opt.OmitEnding := rowGUI.AddCheckbox("","Omit ending char")
+		optParse(textOpt)
+
+		rowGUI.SetFont("s12 bold")
+		rowGUI.AddText("xm w250","`nHotstring")
+		box1 := rowGUI.AddEdit("w500",textStr)
 		
-		rowGUI.AddText("","Replacement")
-		box2 := rowGUI.AddEdit("w500 r2 +Wrap",text2)
+		rowGUI.AddText("","`nReplacement")
+		box2 := rowGUI.AddEdit("w500 r3 +Wrap",textRep)
 		
 		btnSubmit := rowGUI.AddButton("","Submit")
 		btnSubmit.OnEvent("Click",rowSubmit)
@@ -232,10 +244,10 @@ stringEdit(*) {
 		if (rowGUI.closed=true) {
 			return ""
 		}
-		if (box1.Value=text1)&&(box2.Value=text2) {									; no changes, returns blank
+		if (opt.res=textOpt)&&(box1.Value=textStr)&&(box2.Value=textRep) {				; no changes, returns blank
 			return ""
 		} else {
-			return [box1.Value,box2.Value]
+			return [opt.res,box1.Value,box2.Value]
 		}
 
 		rowSubmit(*) {
