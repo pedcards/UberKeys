@@ -216,8 +216,10 @@ stringEdit(*) {
 		opt := []
 		
 		rowGUI.AddText("","Options")
-		rowGUI.SetFont("norm s10")
-		opt.Endchar := rowGUI.AddCheckbox("section","End Char not required")
+		rowGUI.SetFont("norm s8")
+		rowGUI.AddButton("yp","info").OnEvent("Click",infoBtn)
+		rowGUI.SetFont("s10")
+		opt.Endchar := rowGUI.AddCheckbox("xs section","End Char not required")
 		opt.Immediate := rowGUI.AddCheckbox("","Replace immediately")
 		opt.Backspacing := rowGUI.AddCheckbox("","Don't backspace")
 		opt.CaseSensitive := rowGUI.AddCheckbox("ys xs+250","Case sensitive")
