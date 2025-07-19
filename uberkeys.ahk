@@ -261,6 +261,9 @@ stringEdit(*) {
 		}
 
 		infoBtn(*) {
+			if WinExist("Option info") {
+				return
+			}
 			rowGUI.GetPos(&guiX,&guiY,&guiW,&guiH)
 			infoWin := Gui()
 			infoWin.Title := "Option info"
