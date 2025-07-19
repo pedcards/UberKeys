@@ -89,19 +89,21 @@ findDictionary() {
 		paths := [A_ScriptDir]
 	}
 
+	dgui := Gui(,"Store auto-correct dictionary")
+	dgui.SetFont("s12")
+	dgui.AddText(,"Select path to store auto-correct dictionary:")
+	dbut := []
 	for path in paths
 	{
 		check := path "\" fname
-		if FileExist(check) {
+		if FileExist(check) {															; path to dictionary already exists
 			return check
 		}
-	}
 
-	dgui := Gui(,"Store auto-correct dictionary")
-	dgui.AddText(,"Select path to store auto-correct dictionary:")
-	dbut := [1,2,3]
-	for path in paths
-	{
+		dbut.Push(A_Index)
+		if !FileExist(path) {															; path does not exist
+			continue
+		}
 		dbut[A_Index] := dgui.AddButton(,path)
 		dbut[A_Index].OnEvent("Click",res:=dbutpress)
 	}
