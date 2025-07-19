@@ -257,6 +257,24 @@ stringEdit(*) {
 			return [opt.res,box1.Value,box2.Value]
 		}
 
+		infoBtn(*) {
+			rowGUI.GetPos(&guiX,&guiY,&guiW,&guiH)
+			infoWin := Gui()
+			infoWin.Title := "Option info"
+			infoWin.MarginX := 20
+			infoWin.MarginY := 20
+			infoWin.SetFont("s10")
+			infoWin.AddText("+Wrap w350"
+				, "End Char not required - Do not require ending character (e.g. [space], [.], or [enter]) to trigger.`n`n"
+				. "Replace immediately - Trigger immediately when following alphanumeric char, even within another word.`n`n"
+				. "Don't backspace - Will not erase preceding hotstring.`n`n"
+				. "Case sensitive - Hotstsring must match case.`n`n"
+				. "Case conforming - Capitalization follows typed hotstring caps.`n`n"
+				. "Omit ending char - Ignore ending character."
+			)
+			infoWin.Show("x" guiX+guiW+260 " y" guiY)
+		}
+
 		optParse(var,*) {
 			if IsObject(var) {
 				res := ""
