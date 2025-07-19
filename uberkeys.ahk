@@ -244,6 +244,9 @@ stringEdit(*) {
 		rowGUI.Show()
 
 		WinWaitClose("UberKeys Row Edit")
+		if WinExist("Option info") {
+			WinClose("Option info")
+		}
 		optParse(opt)
 		if (rowGUI.delete=true) {
 			return "X"
