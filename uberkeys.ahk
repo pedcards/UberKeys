@@ -82,8 +82,8 @@ changeCase()
 
 findDictionary() {
 	fname := "uberkeys-custom.ahk"
-	paths := [A_MyDocuments "\..\OneDrive - SCH"
-			, A_MyDocuments "\..\OneDrive"
+	paths := ["C:\Users\" A_UserName "\OneDrive - SCH"									; array of potential paths to dictionary
+			, "C:\Users\" A_UserName "\OneDrive"
 			, A_ScriptDir]
 	if InStr(A_ScriptDir,"AhkProjects") {
 		paths := [A_ScriptDir]
