@@ -16,9 +16,21 @@ toggletheme()
 	path := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
 
 	try {
-		light := (RegRead(path, "AppsUseLightTheme") = 0)								; 1 if starting at dark, 0 if starting at light
-		RegWrite(light, "REG_DWORD", path, "AppsUseLightTheme")
-		RegWrite(light, "REG_DWORD", path, "SystemUsesLightTheme")
+		light := (RegRead(path, "AppsUseLightTheme") = 0)
+		Run("ms-settings:colors")
+		try WinWait("Settings")
+		try {
+			Win11El := UIA.ElementFromHandle(WinActive("ahk_exe ApplicationFrameHost.exe"))
+			Win11El.WaitElement({AutomationId:"SystemSettings_Personalize_Color_ColorMode_ComboBox"}, 1000).Click()
+		}
+		catch {
+			ApplicationFrameHostEl := UIA.ElementFromHandle(WinActive("ahk_exe ApplicationFrameHost.exe"))
+			ComboBox := ApplicationFrameHostEl.WaitElement({Name: "Choose your mode", ClassName: "ComboBox"}, 1000)
+			ComboBox.Expand()
+		}
+		Send((light) ? "Light" : "Dark")
+		Send("{Enter}")
+		WinClose("Settings")
 	}
 }
 
@@ -392,3 +404,4 @@ stringEdit(*) {
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
+#Include UIA.ahk
