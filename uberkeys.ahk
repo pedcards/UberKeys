@@ -159,10 +159,25 @@ parseHotString(str)
 tray() {
 	A_IconTip := "UberKeys"
 	tray := A_TrayMenu
-	tray.Add()
+	tray.Delete()
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
+	tray.Add()
+	tray.Add("Suspend functions",toggleSuspend)
 	tray.Add("Edit hotstrings",stringEdit)
 	tray.Default := "Edit hotstrings"
+	
+	toggleSuspend(*) {
+		if (A_IsSuspended) {
+			tray.Rename("Enable functions","Suspend functions")
+			tray.Uncheck("Suspend functions")
+			Suspend(0)
+		} else {
+			tray.Rename("Suspend functions","Enable functions")
+			tray.Check("Enable functions")
+			Suspend(1)
+		}
+	}
+
 }
 
 stringEdit(*) {
