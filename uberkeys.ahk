@@ -22,12 +22,17 @@ toggletheme()
 		try {
 			Win11El := UIA.ElementFromHandle(WinActive("ahk_exe ApplicationFrameHost.exe"))
 			Win11El.WaitElement({AutomationId:"SystemSettings_Personalize_Color_ColorMode_ComboBox"}, 1000).Click()
+			lightswitch()
 		}
 		catch {
 			ApplicationFrameHostEl := UIA.ElementFromHandle(WinActive("ahk_exe ApplicationFrameHost.exe"))
 			ComboBox := ApplicationFrameHostEl.WaitElement({Name: "Choose your mode", ClassName: "ComboBox"}, 1000)
 			ComboBox.Expand()
+			lightswitch()
 		}
+	}
+
+	lightswitch() {
 		Send((light) ? "Light" : "Dark")
 		Send("{Enter}")
 		WinClose("Settings")
