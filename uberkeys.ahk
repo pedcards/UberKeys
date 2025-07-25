@@ -167,8 +167,9 @@ tray() {
 	tray.Delete()
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
 	tray.Add()
-	tray.Add("Suspend functions",toggleSuspend)
 	tray.Add("Edit hotstrings",stringEdit)
+	tray.Add("Suspend functions",toggleSuspend)
+	tray.Add("Quit",quit)
 	tray.Default := "Edit hotstrings"
 	
 	toggleSuspend(*) {
@@ -183,6 +184,9 @@ tray() {
 		}
 	}
 
+	quit(*) {
+		ExitApp
+	}
 }
 
 stringEdit(*) {
