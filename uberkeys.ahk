@@ -93,7 +93,7 @@ changeCase()
 }
 
 findDictionary() {
-	fname := "uberkeys-custom.ahk"
+	fname := "uberkeys-custom"
 	paths := ["C:\Users\" A_UserName "\OneDrive - SCH"									; array of potential paths to dictionary
 			, "C:\Users\" A_UserName "\OneDrive"
 			, A_ScriptDir]
