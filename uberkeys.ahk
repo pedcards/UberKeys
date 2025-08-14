@@ -7,12 +7,16 @@
 #CapsLock::changeCase()
 
 tray()
+dTheme := false
 dPath := findDictionary()
 loadKeys()
 
 ;#######################################################################################
 toggletheme()
 {
+	if (dTheme=false) {
+		return
+	}
 	path := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
 
 	try {
@@ -168,10 +172,23 @@ tray() {
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
 	tray.Add()
 	tray.Add("Edit hotstrings",stringEdit)
+	tray.Add("Dark/Light feature",toggleDark)
 	tray.Add("Suspend functions",toggleSuspend)
 	tray.Add("Quit",quit)
 	tray.Default := "Edit hotstrings"
 	
+	toggleDark(*) {
+		global dTheme
+
+		if (dTheme) {
+			tray.Uncheck("Dark/Light feature")
+			dTheme:=false
+		} else {
+			tray.Check("Dark/Light feature")
+			dTheme:=true
+		}
+	}
+
 	toggleSuspend(*) {
 		if (A_IsSuspended) {
 			tray.Rename("Enable functions","Suspend functions")
