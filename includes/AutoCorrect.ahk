@@ -624,7 +624,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::creusa::Creüsa ; In Greek mythology, Creusa was the daughter of Priam and Hecuba.
 ::crudites::crudités ; noun raw vegetables cut into bite-sized strips and served with a dip
 ::curacao::curaçao ; noun flavored with sour orange peel; a popular island resort in the Netherlands Antilles
-:*:dais::daïs ; noun a platform raised above the surrounding level to give prominence to the person on it
+::dais::daïs ; noun a platform raised above the surrounding level to give prominence to the person on it
 :*:debacle::débâcle ; noun a sudden and violent collapse; flooding caused by a tumultuous breakup of ice in a river during the spring or summer; a sound defeat
 :*:debutante::débutant ; noun a sudden and violent collapse; flooding caused by a tumultuous breakup of ice in a river during the spring or summer; a sound defeat
 ::declasse::déclassé ; Fallen or lowered in class, rank, or social position; lacking high station or birth; of inferior status
