@@ -3,20 +3,19 @@
  */
 #Requires AutoHotkey v2+
 
-+#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
-#CapsLock::changeCase()
-
 tray()
 dTheme := false
 dPath := findDictionary()
 loadKeys()
 
+#HotIf (dTheme)
++#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
+#HotIf 
+#CapsLock::changeCase()
+
 ;#######################################################################################
 toggletheme()
 {
-	if (dTheme=false) {
-		return
-	}
 	path := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
 
 	try {
