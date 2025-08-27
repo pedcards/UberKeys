@@ -8,40 +8,9 @@ dTheme := false
 dPath := findDictionary()
 loadKeys()
 
-#HotIf (dTheme)
-+#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
-#HotIf 
 #CapsLock::changeCase()
 
 ;#######################################################################################
-toggletheme()
-{
-	path := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-
-	try {
-		light := (RegRead(path, "AppsUseLightTheme") = 0)
-		Run("ms-settings:colors")
-		try WinWait("Settings")
-		try {
-			Win11El := UIA.ElementFromHandle(WinActive("ahk_exe ApplicationFrameHost.exe"))
-			Win11El.WaitElement({AutomationId:"SystemSettings_Personalize_Color_ColorMode_ComboBox"}, 1000).Click()
-			lightswitch()
-		}
-		catch {
-			ApplicationFrameHostEl := UIA.ElementFromHandle(WinActive("ahk_exe ApplicationFrameHost.exe"))
-			ComboBox := ApplicationFrameHostEl.WaitElement({Name: "Choose your mode", ClassName: "ComboBox"}, 1000)
-			ComboBox.Expand()
-			lightswitch()
-		}
-	}
-
-	lightswitch() {
-		Send((light) ? "Light" : "Dark")
-		Send("{Enter}")
-		WinClose("Settings")
-	}
-}
-
 changeCase()
 {
 	capsMenu := Menu()
