@@ -403,3 +403,4 @@ stringEdit(*) {
 #Include strx2.ahk
 #Include AutoCorrect.ahk
 #Include stealthpaste.ahk
+#Include Peep.v2.ahk
