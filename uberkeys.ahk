@@ -217,6 +217,7 @@ stringEdit(*) {
 	}
 
 	editRow(textOpt,textStr,textRep) {
+		Suspend(1)
 		rowGUI := Gui("AlwaysOnTop","UberKeys Row Edit")
 		rowGUI.SetFont("s12 bold")
 		rowGUI.delete := false
@@ -252,6 +253,7 @@ stringEdit(*) {
 		rowGUI.Show()
 
 		WinWaitClose("UberKeys Row Edit")
+		Suspend(0)
 		if WinExist("Option info") {
 			WinClose("Option info")
 		}
