@@ -62,10 +62,11 @@ changeCase()
 				copied := "(" . copied . ")"
 		}
 
-		A_Clipboard := copied
-		Send("^v")
-		Sleep(200)
-		A_Clipboard := clipSavedAll
+		; A_Clipboard := copied
+		; Send("^v")
+		; Sleep(200)
+		; A_Clipboard := clipSavedAll
+		StealthPaste(copied)
 	}
 }
 
@@ -413,4 +414,4 @@ stringEdit(*) {
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
-#Include UIA.ahk
+#Include stealthpaste.ahk
