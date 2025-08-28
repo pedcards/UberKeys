@@ -12,6 +12,8 @@ loadKeys()
 ;#######################################################################################
 changeCase()
 {
+	CaretGetPos(&mX,&mY)
+	try MouseMove(mX,mY)
 	capsMenu := Menu()
 	capsMenu.Add("&UPPERCASE",doCopy)
 	capsMenu.Add("&lowercase",doCopy)
