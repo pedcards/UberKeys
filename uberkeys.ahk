@@ -413,6 +413,8 @@ stringEdit(*) {
 	}
 
 	closeGUI(*) {
+		saveKeys()
+		loadKeys()
 		strGUI.Destroy()
 	}
 
