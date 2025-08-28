@@ -29,7 +29,7 @@ changeCase()
 		clipSavedAll := ClipboardAll()
 		A_Clipboard := ""
 
-		Send("^c")
+		SendInput("^c")
 
 		if (!ClipWait(2)) {
 			A_Clipboard := clipSavedAll
@@ -63,11 +63,11 @@ changeCase()
 				copied := "(" . copied . ")"
 		}
 
-		; A_Clipboard := copied
-		; Send("^v")
-		; Sleep(200)
-		; A_Clipboard := clipSavedAll
-		StealthPaste(copied)
+		A_Clipboard := copied
+		ClipWait(0.5)
+		SendInput("^v")
+		Sleep(200)
+		A_Clipboard := clipSavedAll
 	}
 }
 
@@ -449,5 +449,3 @@ stringEdit(*) {
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
-#Include stealthpaste.ahk
-#Include Peep.v2.ahk
