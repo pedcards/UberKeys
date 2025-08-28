@@ -277,7 +277,6 @@ stringEdit(*) {
 		opt.Immediate := rowGUI.AddCheckbox("","Replace immediately")
 		opt.Backspacing := rowGUI.AddCheckbox("","Don't backspace")
 		opt.CaseSensitive := rowGUI.AddCheckbox("ys xs+250","Case sensitive")
-		opt.CaseConforming := rowGUI.AddCheckbox("","Case conforming")
 		opt.OmitEnding := rowGUI.AddCheckbox("","Omit ending char")
 		optParse(textOpt)
 
@@ -327,10 +326,9 @@ stringEdit(*) {
 			infoWin.SetFont("s10")
 			infoWin.AddText("+Wrap w350"
 				, "End Char not required - Do not require ending character (e.g. [space], [.], or [enter]) to trigger.`n`n"
-				. "Replace immediately - Trigger immediately when following alphanumeric char, even within another word.`n`n"
+				. "Replace immediately - Trigger immediately following last char, even within another word.`n`n"
 				. "Don't backspace - Will not erase preceding hotstring.`n`n"
 				. "Case sensitive - Hotstsring must match case.`n`n"
-				. "Case conforming - Capitalization follows typed hotstring caps.`n`n"
 				. "Omit ending char - Ignore ending character."
 			)
 			infoWin.Show("x" guiX+guiW+260 " y" guiY)
@@ -351,9 +349,6 @@ stringEdit(*) {
 				if (opt.CaseSensitive.Value=true) {
 					res .= "C"
 				}
-				if (opt.CaseConforming.Value=true) {
-					res .= "C1"
-				}
 				if (opt.OmitEnding.Value=true) {
 					res .= "O"
 				}
@@ -370,9 +365,6 @@ stringEdit(*) {
 				}
 				if InStr(var,"C") {
 					opt.CaseSensitive.Value := true
-				}
-				if InStr(var,"C1") {
-					opt.CaseConforming.Value := true
 				}
 				if InStr(var,"O") {
 					opt.OmitEnding.Value := true
