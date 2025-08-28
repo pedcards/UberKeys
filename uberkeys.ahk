@@ -171,7 +171,7 @@ stringEdit(*) {
 	strGUI.SetFont("Norm s12")
 	strLV := strGUI.AddListView("w600 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Opts","Shortcut","Expansion"])
 	strLV.OnEvent("DoubleClick",clickRow)
-	strLV.ModifyCol(1,32)
+	strLV.ModifyCol(1,5)
 	strLV.ModifyCol(2,"Center")
 	strLV.ModifyCol(3,120)
 	strLV.ModifyCol(4,430)
@@ -188,6 +188,49 @@ stringEdit(*) {
 	}
 
 	strGUI.Show
+
+	HotIfWinActive("UberKeys","Auto-correct Dictionary")
+		Hotkey "+Up",moveRow
+		Hotkey "+Down",moveRow
+		Hotkey "Esc",closeGUI
+	HotIfWinActive
+
+	moveRow(dir) {
+		if !(row := strLV.GetNext()) {
+			return
+		}
+
+		Switch dir
+		{
+		Case "+Up":
+			if (row=1) {
+				return
+			}
+			swapRows(row-1)
+			strLV.Modify(row,"-Select")
+			strLV.Modify(row-1,"Select")
+
+		Case "+Down":
+			if (row=strLV.GetCount()) {
+				return
+			}
+			swapRows(row)
+			strLV.Modify(row,"-Select")
+			strLV.Modify(row+1,"Select")
+		}
+
+		return
+	}
+	swapRows(row1) {
+		loop strLV.GetCount("Col")
+		{
+			col := A_Index
+			txt1 := strLV.GetText(row1,col)
+			txt2 := strLV.GetText(row1+1,col)
+			strLV.Modify(row1, "Col" col, txt2)
+			strLV.Modify(row1+1, "Col" col, txt1)
+		}
+	}
 
 	clickRow(LV,rownum) {
 		strGUI.Hide()
