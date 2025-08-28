@@ -171,7 +171,6 @@ stringEdit(*) {
 	strGUI.SetFont("Norm s12")
 	strLV := strGUI.AddListView("w600 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Opts","Shortcut","Expansion"])
 	strLV.OnEvent("DoubleClick",clickRow)
-	strLV.OnEvent("Click",selectRow)
 	strLV.ModifyCol(1,32)
 	strLV.ModifyCol(2,"Center")
 	strLV.ModifyCol(3,120)
@@ -189,19 +188,6 @@ stringEdit(*) {
 	}
 
 	strGUI.Show
-
-	selectRow(LV,rownum) {
-		static LVM_GETCOLUMNWIDTH := 0x101D
-		FirstColumnWidth := SendMessage(LVM_GETCOLUMNWIDTH, 0, 0, LV.Hwnd)
-		strLV.GetPos(&lvx,&lvy)
-		MouseGetPos(&mx,&my)
-		if (mx>(lvx+FirstColumnWidth)) {
-			return
-		}
-
-		LV.Modify(rownum,," ↑↓")
-
-	}
 
 	clickRow(LV,rownum) {
 		strGUI.Hide()
