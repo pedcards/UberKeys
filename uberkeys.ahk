@@ -13,7 +13,6 @@ loadKeys()
 changeCase()
 {
 	CaretGetPos(&mX,&mY)
-	try MouseMove(mX,mY)
 	capsMenu := Menu()
 	capsMenu.Add("&UPPERCASE",doCopy)
 	capsMenu.Add("&lowercase",doCopy)
@@ -23,7 +22,10 @@ changeCase()
 	capsMenu.Add("&(parentheses)",doCopy)
 	capsMenu.Add("&'single quotes'",doCopy)
 	capsMenu.Add("&`"double quotes`"",doCopy)
-	capsMenu.Show()
+	try capsMenu.Show(mX,mY)
+	catch {
+		capsMenu.Show()
+	}
 
 	doCopy(fn, *) {
 		clipSavedAll := ClipboardAll()
