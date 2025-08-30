@@ -190,6 +190,7 @@ stringEdit(*) {
 			,res.c
 		)
 	}
+	strLV.Add("")
 
 	strGUI.Show
 
@@ -201,6 +202,9 @@ stringEdit(*) {
 
 	moveRow(dir) {
 		if !(row := strLV.GetNext()) {
+			return
+		}
+		if (strLV.GetText(row,2)="") {
 			return
 		}
 
@@ -216,6 +220,9 @@ stringEdit(*) {
 
 		Case "+Down":
 			if (row=strLV.GetCount()) {
+				return
+			}
+			if (strLV.GetText(row+1,2)="") {
 				return
 			}
 			swapRows(row)
