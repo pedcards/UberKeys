@@ -167,6 +167,9 @@ tray() {
 }
 
 stringEdit(*) {
+	if WinExist("UberKeys","Auto-correct Dictionary") {
+		return
+	}
 	strGUI := Gui(,"UberKeys")
 	strGUI.MarginX := 10
 	strGUI.MarginY := 10
