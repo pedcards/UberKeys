@@ -127,6 +127,7 @@ loadKeys() {
 	for val in dict
 	{
 		res := parseHotString(val)
+		res.a := RegExReplace(res.a,"[xX]")
 		Hotstring(res.a res.b,res.c)
 	}
 }
