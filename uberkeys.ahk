@@ -1,6 +1,7 @@
 /*	Personal hotkeys for general use
  *
  */
+#SingleInstance Force
 #Requires AutoHotkey v2+
 
 tray()
