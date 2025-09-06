@@ -129,7 +129,8 @@ loadKeys() {
 	{
 		res := parseHotString(val)
 		res.a := RegExReplace(res.a,"[xX]")
-		Hotstring(res.a res.b,res.c)
+		Hotstring("::" res.b,res.c,false)
+		Hotstring(res.a res.b,res.c,true)
 	}
 }
 
