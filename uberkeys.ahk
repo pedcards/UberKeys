@@ -10,6 +10,11 @@ loadKeys()
 
 #CapsLock::changeCase()
 
+~LButton & Left::MouseMove(-1,0,,'R')
+~LButton & Right::MouseMove(+1,0,,'R')
+~LButton & Up::MouseMove(0,-1,,'R')
+~LButton & Down::MouseMove(0,+1,,'R')
+
 ;#######################################################################################
 changeCase()
 {
