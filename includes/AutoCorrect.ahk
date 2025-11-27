@@ -1,5 +1,8 @@
 ﻿#SingleInstance
 #Requires AutoHotkey v2.0
+if !IsSet(flags) {
+  flags := Map()
+}
 ;------------------------------------------------------------------------------
 ; CONTENTS
 ;	Discussion
@@ -400,6 +403,7 @@ hhButtonCancel(*)
 */
 
 ;######## Below parts are from original AutoCorrect 2007 ##################
+#HotIf (flags.misspelled)
 #Hotstring R  ; Set the default to be "raw mode" (might not actually be relied upon by anything yet).
 
 ;------------------------------------------------------------------------------
@@ -566,7 +570,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;------------------------------------------------------------------------------
 :?*:compatab::compatib  ; Covers incompat* and compat*
 :?*:catagor::categor  ; Covers subcatagories and catagories.
-
+#HotIf 
 
 ;------------------------------------------------------------------------------
 ; Accented English words, from, amongst others,
@@ -577,6 +581,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; 2023: Most of the definitions are from https://www.easydefine.com/ or from the WordWeb application.
 ; 2023: Several are converted to word endings to accommodate verb tenses, plural, etc.
 ;------------------------------------------------------------------------------
+#HotIf (flags.accented)
 ; ::aesop::Æsop ; noun Greek author of fables (circa 620-560 BC)
 ::a bas::à bas ; French: Down with -- To the bottom.  A type of clothing.
 ::a la::à la ; In the manner of...
@@ -778,10 +783,12 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::vis a vis::vis à vis ; adv. face-to-face
 ::vis-a-vis::vis-à-vis ; See above
 ::voila::voilà ; Behold.  There you are.
+#HotIf 
 
 ;------------------------------------------------------------------------------
 ; Common Misspellings - the main list
 ;------------------------------------------------------------------------------
+#HotIf (flags.misspelled)
 ::htp:::http:
 ::http:\\::http://
 ::httpL::http:
@@ -5183,6 +5190,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::zeebra::zebra
 ::sionist::Zionist
 ::sionists::Zionists
+#HotIf 
 
 ;------------------------------------------------------------------------------
 ; Ambiguous entries.  Where desired, pick the one that's best for you, edit,
@@ -5456,6 +5464,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;-------------------------------------------------------------------------------
 ;  Capitalise dates
 ;-------------------------------------------------------------------------------
+#HotIf (flags.datecaps)
 ::monday::Monday
 ::tuesday::Tuesday
 ::wednesday::Wednesday
@@ -5476,7 +5485,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::october::October
 ::november::November
 ::december::December
-
+#HotIf 
 
 ;-------------------------------------------------------------------------------
 ; Anything below this point was added to the script by the user via the Win+H hotkey.

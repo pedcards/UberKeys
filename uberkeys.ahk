@@ -8,12 +8,16 @@ tray()
 dPath := findDictionary()
 loadKeys()
 
+#HotIf (flags.capslock)
 #CapsLock::changeCase()
+#HotIf 
 
+#HotIf (flags.pixelmove)
 ~LButton & Left::MouseMove(-1,0,,'R')
 ~LButton & Right::MouseMove(+1,0,,'R')
 ~LButton & Up::MouseMove(0,-1,,'R')
 ~LButton & Down::MouseMove(0,+1,,'R')
+#HotIf 
 
 ;#######################################################################################
 changeCase()
