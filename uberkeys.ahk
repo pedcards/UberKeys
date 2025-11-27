@@ -4,6 +4,18 @@
 #SingleInstance Force
 #Requires AutoHotkey v2+
 
+trayFeatures := Map(
+	"misspelled","Fix common typos",
+	"accented","Fix accented words",
+	"datecaps","Fix date capitals",
+	"capslock","Win-CapsLock feature",
+	"pixelmove","LMB+arrow move"
+	)
+flags := Map()
+for key,val in trayFeatures {
+	flags.%key% := true
+}
+
 tray()
 dPath := findDictionary()
 loadKeys()
@@ -156,7 +168,12 @@ tray() {
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
 	tray.Add()
 	tray.Add("Edit hotstrings",stringEdit)
-	tray.Add("Suspend functions",toggleSuspend)
+	for key,val in trayFeatures {
+		tray.Add(val,toggleFuncs)
+		tray.Check(val)
+	}
+	tray.Add()
+	tray.Add("Suspend all functions",toggleSuspend)
 	tray.Add("Quit",quit)
 	tray.Default := "Edit hotstrings"
 	
