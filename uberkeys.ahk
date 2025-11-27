@@ -177,6 +177,20 @@ tray() {
 	tray.Add("Quit",quit)
 	tray.Default := "Edit hotstrings"
 	
+	toggleFuncs(x,*) {
+		for key,val in trayFeatures {
+			if (val=x) {
+				flags.%key% := !flags.%key%
+				if (flags.%key%) {
+					tray.Check(val)
+				} else {
+					tray.Uncheck(val)
+				}
+				break
+			}
+		}
+	}
+
 	toggleSuspend(*) {
 		if (A_IsSuspended) {
 			tray.Rename("Resume all functions","Suspend all functions")
