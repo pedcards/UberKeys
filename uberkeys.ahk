@@ -179,12 +179,10 @@ tray() {
 	
 	toggleSuspend(*) {
 		if (A_IsSuspended) {
-			tray.Rename("Enable functions","Suspend functions")
-			tray.Uncheck("Suspend functions")
+			tray.Rename("Resume all functions","Suspend all functions")
 			Suspend(0)
 		} else {
-			tray.Rename("Suspend functions","Enable functions")
-			tray.Check("Enable functions")
+			tray.Rename("Suspend all functions","Resume all functions")
 			Suspend(1)
 		}
 	}
