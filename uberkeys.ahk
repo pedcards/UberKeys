@@ -35,6 +35,7 @@ loadKeys()
 ^Left::clickPicIX("prev")
 ^Right::clickPicIX("next")
 ^Up::clickPicIX("zoom")
+^Down::clickPicIX("down")
 #HotIf 
 
 ;#######################################################################################
@@ -520,6 +521,13 @@ clickPicIX(action) {
 			compressed := combo.WaitElement({Name:'Compressed Wave'},5000)				; updated droplist
 			compressed.Click
 		}
+	case "down":
+		try {
+			btn := frame.FindElement({Type:'Button',Name:'Restore Down'})
+		} catch {
+			btn := frame.FindElement({Type:'Button',Name:'Maximize'})
+		}
+		btn.Click()
 	}
 }
 
