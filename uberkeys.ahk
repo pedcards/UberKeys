@@ -34,6 +34,7 @@ loadKeys()
 #HotIf (winID:=WinActive('ahk_exe msedge.exe')) && (WinGetTitle('ahk_id ' winID)~="General|Cardiac")
 ^Left::clickPicIX("prev")
 ^Right::clickPicIX("next")
+^Up::clickPicIX("zoom")
 #HotIf 
 
 ;#######################################################################################
@@ -508,6 +509,17 @@ clickPicIX(action) {
 	case "next":
 		btn := frame.FindElement({Type:'Button',Name:'Next Page'})
 		btn.Click
+	case "zoom":
+		group := frame
+					.FindElement({Type:'DataItem',Name:'Change Tile:'})					; First "Change Tile:" label
+					.WalkTree("p2")
+		combo := group.FindElement({Type:"ComboBox"})									; Find first combo box
+		
+		if (combo.WalkTree("p1").Name = "Strip") {
+			combo.Expand()
+			compressed := combo.WaitElement({Name:'Compressed Wave'},5000)				; updated droplist
+			compressed.Click
+		}
 	}
 }
 
