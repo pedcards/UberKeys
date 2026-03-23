@@ -29,6 +29,11 @@ loadKeys()
 ~LButton & Right::MouseMove(+1,0,,'R')
 ~LButton & Up::MouseMove(0,-1,,'R')
 ~LButton & Down::MouseMove(0,+1,,'R')
+#HotIf
+
+#HotIf (winID:=WinActive('ahk_exe msedge.exe')) && (WinGetTitle('ahk_id ' winID)~="General|Cardiac")
+^Left::clickPicIX("prev")
+^Right::clickPicIX("next")
 #HotIf 
 
 ;#######################################################################################
@@ -488,6 +493,21 @@ stringEdit(*) {
 			res .= t1 t2 "::" t3 "`n"
 		}
 		return res
+	}
+}
+
+clickPicIX(action) {
+	hwnd := WinActive("ahk_exe msedge.exe")
+	frame := UIA.ElementFromHandle(hwnd)
+
+	try switch action
+	{
+	case "prev":
+		btn := frame.FindElement({Type:'Button',Name:'Previous Page'})
+		btn.Click
+	case "next":
+		btn := frame.FindElement({Type:'Button',Name:'Next Page'})
+		btn.Click
 	}
 }
 
