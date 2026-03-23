@@ -1,5 +1,8 @@
 ﻿#SingleInstance
 #Requires AutoHotkey v2.0
+if !IsSet(flags) {
+  flags := Map()
+}
 ;------------------------------------------------------------------------------
 ; CONTENTS
 ;	Discussion
@@ -400,6 +403,7 @@ hhButtonCancel(*)
 */
 
 ;######## Below parts are from original AutoCorrect 2007 ##################
+#HotIf (flags.misspelled)
 #Hotstring R  ; Set the default to be "raw mode" (might not actually be relied upon by anything yet).
 
 ;------------------------------------------------------------------------------
@@ -566,7 +570,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;------------------------------------------------------------------------------
 :?*:compatab::compatib  ; Covers incompat* and compat*
 :?*:catagor::categor  ; Covers subcatagories and catagories.
-
+#HotIf 
 
 ;------------------------------------------------------------------------------
 ; Accented English words, from, amongst others,
@@ -577,11 +581,12 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ; 2023: Most of the definitions are from https://www.easydefine.com/ or from the WordWeb application.
 ; 2023: Several are converted to word endings to accommodate verb tenses, plural, etc.
 ;------------------------------------------------------------------------------
-::aesop::Æsop ; noun Greek author of fables (circa 620-560 BC)
+#HotIf (flags.accented)
+; ::aesop::Æsop ; noun Greek author of fables (circa 620-560 BC)
 ::a bas::à bas ; French: Down with -- To the bottom.  A type of clothing.
 ::a la::à la ; In the manner of...
 ::ancien regime::Ancien Régime ; noun a political and social system that no longer governs (especially the system that existed in France before the French Revolution)
-:*:angstrom::Ångström ; noun a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron); used to specify wavelengths of electromagnetic radiation
+; :*:angstrom::Ångström ; noun a metric unit of length equal to one ten billionth of a meter (or 0.0001 micron); used to specify wavelengths of electromagnetic radiation
 ::ao dai::ào dái  ; noun the traditional dress of Vietnamese women consisting of a tunic with long sleeves and panels front and back; the tunic is worn over trousers
 :*:apertif::apértif ; noun an alcoholic drink that is taken as an appetizer before a meal
 :*:applique::appliqué ; noun a decorative design made of one material sewn over another; verb sew on as a decoration
@@ -624,7 +629,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::creusa::Creüsa ; In Greek mythology, Creusa was the daughter of Priam and Hecuba.
 ::crudites::crudités ; noun raw vegetables cut into bite-sized strips and served with a dip
 ::curacao::curaçao ; noun flavored with sour orange peel; a popular island resort in the Netherlands Antilles
-:*:dais::daïs ; noun a platform raised above the surrounding level to give prominence to the person on it
+::dais::daïs ; noun a platform raised above the surrounding level to give prominence to the person on it
 :*:debacle::débâcle ; noun a sudden and violent collapse; flooding caused by a tumultuous breakup of ice in a river during the spring or summer; a sound defeat
 :*:debutante::débutant ; noun a sudden and violent collapse; flooding caused by a tumultuous breakup of ice in a river during the spring or summer; a sound defeat
 ::declasse::déclassé ; Fallen or lowered in class, rank, or social position; lacking high station or birth; of inferior status
@@ -719,8 +724,8 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 :*:negligee::negligée ; noun a loose dressing gown for women
 ::neufchatel::Neufchâtel ; a cheese
 ::nez perce::Nez Percé ; noun the Shahaptian language spoken by the Nez Perce; a member of a tribe of the Shahaptian people living on the pacific coast
-:*:noel::Noël ; French:  Christmas.
-::número uno::número uno ; Number one
+; :*:noel::Noël ; French:  Christmas.
+::numero uno::número uno ; Number one
 ::objet trouve::objet trouvé ; An object found or picked up at random and considered aesthetically pleasing.
 ::objets trouve::objets trouvé ; See above.
 :*:ombre::ombré ;  (literally "shaded" in French) is the blending of one color hue to another.  A card game.
@@ -738,7 +743,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 :*:pina colada::Piña Colada ; noun a mixed drink made of pineapple juice and coconut cream and rum
 :*:pinata::piñata ; noun plaything consisting of a container filled with toys and candy; suspended from a height for blindfolded children to break with sticks
 :*:pinon::piñon ; noun any of several low-growing pines of western North America
-::pirana::piraña ; noun small voraciously carnivorous freshwater fishes of South America that attack and destroy living animals
+::pirana::piranha ; noun small voraciously carnivorous freshwater fishes of South America that attack and destroy living animals
 ::pique::piqué ; noun tightly woven fabric with raised cords; a sudden outburst of anger; verb cause to feel resentment or indignation
 ::piqued::piquéd ;noun Animosity or ill-feeling, Offence taken. transitive verb To wound the pride of To arouse, stir, provoke.
 ::più::più ; Move.
@@ -778,10 +783,12 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::vis a vis::vis à vis ; adv. face-to-face
 ::vis-a-vis::vis-à-vis ; See above
 ::voila::voilà ; Behold.  There you are.
+#HotIf 
 
 ;------------------------------------------------------------------------------
 ; Common Misspellings - the main list
 ;------------------------------------------------------------------------------
+#HotIf (flags.misspelled)
 ::htp:::http:
 ::http:\\::http://
 ::httpL::http:
@@ -5183,6 +5190,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::zeebra::zebra
 ::sionist::Zionist
 ::sionists::Zionists
+#HotIf 
 
 ;------------------------------------------------------------------------------
 ; Ambiguous entries.  Where desired, pick the one that's best for you, edit,
@@ -5456,6 +5464,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ;-------------------------------------------------------------------------------
 ;  Capitalise dates
 ;-------------------------------------------------------------------------------
+#HotIf (flags.datecaps)
 ::monday::Monday
 ::tuesday::Tuesday
 ::wednesday::Wednesday
@@ -5476,7 +5485,7 @@ return  ; This makes the above hotstrings do nothing so that they override the i
 ::october::October
 ::november::November
 ::december::December
-
+#HotIf 
 
 ;-------------------------------------------------------------------------------
 ; Anything below this point was added to the script by the user via the Win+H hotkey.

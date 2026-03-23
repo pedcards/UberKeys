@@ -1,29 +1,47 @@
 /*	Personal hotkeys for general use
  *
  */
+#SingleInstance Force
 #Requires AutoHotkey v2+
 
-+#d::toggletheme()																		; Shift+Win+D = toggle Windows DARK/LIGHT mode
-#CapsLock::changeCase()
+trayFeatures := Map(
+	"misspelled","Fix common typos",
+	"accented","Fix accented words",
+	"datecaps","Fix date capitals",
+	"capslock","Win-CapsLock feature",
+	"pixelmove","LMB+arrow move"
+	)
+flags := Map()
+for key,val in trayFeatures {
+	flags.%key% := true
+}
 
 tray()
 dPath := findDictionary()
 loadKeys()
 
+#HotIf (flags.capslock)
+#CapsLock::changeCase()
+#HotIf 
+
+#HotIf (flags.pixelmove)
+~LButton & Left::MouseMove(-1,0,,'R')
+~LButton & Right::MouseMove(+1,0,,'R')
+~LButton & Up::MouseMove(0,-1,,'R')
+~LButton & Down::MouseMove(0,+1,,'R')
+#HotIf
+
+#HotIf (winID:=WinActive('ahk_exe msedge.exe')) && (WinGetTitle('ahk_id ' winID)~="General|Cardiac")
+^Left::clickPicIX("prev")
+^Right::clickPicIX("next")
+^Up::clickPicIX("zoom")
+^Down::clickPicIX("down")
+#HotIf 
+
 ;#######################################################################################
-toggletheme()
-{
-	path := "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-
-	try {
-		light := (RegRead(path, "AppsUseLightTheme") = 0)								; 1 if starting at dark, 0 if starting at light
-		RegWrite(light, "REG_DWORD", path, "AppsUseLightTheme")
-		RegWrite(light, "REG_DWORD", path, "SystemUsesLightTheme")
-	}
-}
-
 changeCase()
 {
+	CaretGetPos(&mX,&mY)
 	capsMenu := Menu()
 	capsMenu.Add("&UPPERCASE",doCopy)
 	capsMenu.Add("&lowercase",doCopy)
@@ -33,13 +51,16 @@ changeCase()
 	capsMenu.Add("&(parentheses)",doCopy)
 	capsMenu.Add("&'single quotes'",doCopy)
 	capsMenu.Add("&`"double quotes`"",doCopy)
-	capsMenu.Show()
+	try capsMenu.Show(mX,mY)
+	catch {
+		capsMenu.Show()
+	}
 
 	doCopy(fn, *) {
 		clipSavedAll := ClipboardAll()
 		A_Clipboard := ""
 
-		Send("^c")
+		SendInput("^c")
 
 		if (!ClipWait(2)) {
 			A_Clipboard := clipSavedAll
@@ -74,34 +95,37 @@ changeCase()
 		}
 
 		A_Clipboard := copied
-		Send("^v")
+		ClipWait(0.5)
+		SendInput("^v")
 		Sleep(200)
 		A_Clipboard := clipSavedAll
 	}
 }
 
 findDictionary() {
-	fname := "uberkeys-custom.ahk"
-	paths := [A_MyDocuments "\..\OneDrive - SCH"
-			, A_MyDocuments "\..\OneDrive"
+	fname := "uberkeys-custom"
+	paths := ["C:\Users\" A_UserName "\OneDrive - SCH"									; array of potential paths to dictionary
+			, "C:\Users\" A_UserName "\OneDrive"
 			, A_ScriptDir]
 	if InStr(A_ScriptDir,"AhkProjects") {
 		paths := [A_ScriptDir]
 	}
 
+	dgui := Gui(,"Store auto-correct dictionary")
+	dgui.SetFont("s12")
+	dgui.AddText(,"Select path to store auto-correct dictionary:")
+	dbut := []
 	for path in paths
 	{
 		check := path "\" fname
-		if FileExist(check) {
+		if FileExist(check) {															; path to dictionary already exists
 			return check
 		}
-	}
 
-	dgui := Gui(,"Store auto-correct dictionary")
-	dgui.AddText(,"Select path to store auto-correct dictionary:")
-	dbut := [1,2,3]
-	for path in paths
-	{
+		dbut.Push(A_Index)
+		if !FileExist(path) {															; path does not exist
+			continue
+		}
 		dbut[A_Index] := dgui.AddButton(,path)
 		dbut[A_Index].OnEvent("Click",res:=dbutpress)
 	}
@@ -132,7 +156,9 @@ loadKeys() {
 	for val in dict
 	{
 		res := parseHotString(val)
-		Hotstring(res.a res.b,res.c)
+		res.a := RegExReplace(res.a,"[xX]")
+		Hotstring("::" res.b,res.c,false)
+		Hotstring(res.a res.b,res.c,true)
 	}
 }
 
@@ -145,13 +171,52 @@ parseHotString(str)
 tray() {
 	A_IconTip := "UberKeys"
 	tray := A_TrayMenu
-	tray.Add()
+	tray.Delete()
 	tray.Add("UberKeys v" FileGetTime(A_ScriptName),(*)=>{})
+	tray.Add()
 	tray.Add("Edit hotstrings",stringEdit)
+	for key,val in trayFeatures {
+		tray.Add(val,toggleFuncs)
+		tray.Check(val)
+	}
+	tray.Add()
+	tray.Add("Suspend all functions",toggleSuspend)
+	tray.Add("Quit",quit)
 	tray.Default := "Edit hotstrings"
+	
+	toggleFuncs(x,*) {
+		for key,val in trayFeatures {
+			if (val=x) {
+				flags.%key% := !flags.%key%
+				if (flags.%key%) {
+					tray.Check(val)
+				} else {
+					tray.Uncheck(val)
+				}
+				break
+			}
+		}
+	}
+
+	toggleSuspend(*) {
+		if (A_IsSuspended) {
+			tray.Rename("Resume all functions","Suspend all functions")
+			Suspend(0)
+		} else {
+			tray.Rename("Suspend all functions","Resume all functions")
+			Suspend(1)
+		}
+	}
+
+	quit(*) {
+		ExitApp
+	}
 }
 
 stringEdit(*) {
+	if WinExist("UberKeys","Auto-correct Dictionary") {
+		return
+	}
 	strGUI := Gui(,"UberKeys")
 	strGUI.MarginX := 10
 	strGUI.MarginY := 10
@@ -159,7 +224,7 @@ stringEdit(*) {
 	strGUI.SetFont("bold s16")
 	strGUI.AddText("w600 Center","Auto-correct Dictionary")
 	strGUI.SetFont("Norm s12")
-	strLV := strGUI.AddListView("w600 h200 Grid +Hdr -ReadOnly NoSortHdr",["","Opts","Shortcut","Expansion"])
+	strLV := strGUI.AddListView("w600 h300 Grid +Hdr -ReadOnly BackgroundC0C0C0 NoSortHdr",["","Opts","Shortcut","Expansion"])
 	strLV.OnEvent("DoubleClick",clickRow)
 	strLV.ModifyCol(1,5)
 	strLV.ModifyCol(2,"Center")
@@ -176,8 +241,58 @@ stringEdit(*) {
 			,res.c
 		)
 	}
+	strLV.Add("")
 
 	strGUI.Show
+
+	HotIfWinActive("UberKeys","Auto-correct Dictionary")
+		Hotkey "+Up",moveRow
+		Hotkey "+Down",moveRow
+		Hotkey "Esc",closeGUI
+	HotIfWinActive
+
+	moveRow(dir) {
+		if !(row := strLV.GetNext()) {
+			return
+		}
+		if (strLV.GetText(row,2)="") {
+			return
+		}
+
+		Switch dir
+		{
+		Case "+Up":
+			if (row=1) {
+				return
+			}
+			swapRows(row-1)
+			strLV.Modify(row,"-Select")
+			strLV.Modify(row-1,"Select")
+
+		Case "+Down":
+			if (row=strLV.GetCount()) {
+				return
+			}
+			if (strLV.GetText(row+1,2)="") {
+				return
+			}
+			swapRows(row)
+			strLV.Modify(row,"-Select")
+			strLV.Modify(row+1,"Select")
+		}
+
+		return
+	}
+	swapRows(row1) {
+		loop strLV.GetCount("Col")
+		{
+			col := A_Index
+			txt1 := strLV.GetText(row1,col)
+			txt2 := strLV.GetText(row1+1,col)
+			strLV.Modify(row1, "Col" col, txt2)
+			strLV.Modify(row1+1, "Col" col, txt1)
+		}
+	}
 
 	clickRow(LV,rownum) {
 		strGUI.Hide()
@@ -207,6 +322,7 @@ stringEdit(*) {
 	}
 
 	editRow(textOpt,textStr,textRep) {
+		Suspend(1)
 		rowGUI := Gui("AlwaysOnTop","UberKeys Row Edit")
 		rowGUI.SetFont("s12 bold")
 		rowGUI.delete := false
@@ -214,12 +330,13 @@ stringEdit(*) {
 		opt := []
 		
 		rowGUI.AddText("","Options")
-		rowGUI.SetFont("norm s10")
-		opt.Endchar := rowGUI.AddCheckbox("section","End Char not required")
+		rowGUI.SetFont("norm s8")
+		rowGUI.AddButton("yp","info").OnEvent("Click",infoBtn)
+		rowGUI.SetFont("s10")
+		opt.Endchar := rowGUI.AddCheckbox("xs section","End Char not required")
 		opt.Immediate := rowGUI.AddCheckbox("","Replace immediately")
 		opt.Backspacing := rowGUI.AddCheckbox("","Don't backspace")
 		opt.CaseSensitive := rowGUI.AddCheckbox("ys xs+250","Case sensitive")
-		opt.CaseConforming := rowGUI.AddCheckbox("","Case conforming")
 		opt.OmitEnding := rowGUI.AddCheckbox("","Omit ending char")
 		optParse(textOpt)
 
@@ -240,6 +357,10 @@ stringEdit(*) {
 		rowGUI.Show()
 
 		WinWaitClose("UberKeys Row Edit")
+		Suspend(0)
+		if WinExist("Option info") {
+			WinClose("Option info")
+		}
 		optParse(opt)
 		if (rowGUI.delete=true) {
 			return "X"
@@ -251,6 +372,26 @@ stringEdit(*) {
 			return ""
 		} else {
 			return [opt.res,box1.Value,box2.Value]
+		}
+
+		infoBtn(*) {
+			if WinExist("Option info") {
+				return
+			}
+			rowGUI.GetPos(&guiX,&guiY,&guiW,&guiH)
+			infoWin := Gui()
+			infoWin.Title := "Option info"
+			infoWin.MarginX := 20
+			infoWin.MarginY := 20
+			infoWin.SetFont("s10")
+			infoWin.AddText("+Wrap w350"
+				, "End Char not required - Do not require ending character (e.g. [space], [.], or [enter]) to trigger.`n`n"
+				. "Replace immediately - Trigger immediately following last char, even within another word.`n`n"
+				. "Don't backspace - Will not erase preceding hotstring.`n`n"
+				. "Case sensitive - Hotstsring must match case.`n`n"
+				. "Omit ending char - Ignore ending character."
+			)
+			infoWin.Show("x" guiX+guiW+260 " y" guiY)
 		}
 
 		optParse(var,*) {
@@ -268,9 +409,6 @@ stringEdit(*) {
 				if (opt.CaseSensitive.Value=true) {
 					res .= "C"
 				}
-				if (opt.CaseConforming.Value=true) {
-					res .= "C1"
-				}
 				if (opt.OmitEnding.Value=true) {
 					res .= "O"
 				}
@@ -287,9 +425,6 @@ stringEdit(*) {
 				}
 				if InStr(var,"C") {
 					opt.CaseSensitive.Value := true
-				}
-				if InStr(var,"C1") {
-					opt.CaseConforming.Value := true
 				}
 				if InStr(var,"O") {
 					opt.OmitEnding.Value := true
@@ -332,6 +467,8 @@ stringEdit(*) {
 	}
 
 	closeGUI(*) {
+		saveKeys()
+		loadKeys()
 		strGUI.Destroy()
 	}
 
@@ -361,6 +498,40 @@ stringEdit(*) {
 	}
 }
 
+clickPicIX(action) {
+	hwnd := WinActive("ahk_exe msedge.exe")
+	frame := UIA.ElementFromHandle(hwnd)
+
+	try switch action
+	{
+	case "prev":
+		btn := frame.FindElement({Type:'Button',Name:'Previous Page'})
+		btn.Click()
+	case "next":
+		btn := frame.FindElement({Type:'Button',Name:'Next Page'})
+		btn.Click()
+	case "zoom":
+		group := frame
+					.FindElement({Type:'DataItem',Name:'Change Tile:'})					; First "Change Tile:" label
+					.WalkTree("p2")
+		combo := group.FindElement({Type:"ComboBox"})									; Find first combo box
+		
+		if (combo.WalkTree("p1").Name = "Strip") {
+			combo.Expand()
+			compressed := combo.WaitElement({Name:'Compressed Wave'},5000)				; updated droplist
+			compressed.Click()
+		}
+	case "down":
+		try {
+			btn := frame.FindElement({Type:'Button',Name:'Restore Down'})
+		} catch {
+			btn := frame.FindElement({Type:'Button',Name:'Maximize'})
+		}
+		btn.Click()
+	}
+}
+
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
+#Include UIA.ahk
