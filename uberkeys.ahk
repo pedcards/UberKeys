@@ -494,3 +494,4 @@ stringEdit(*) {
 #Include includes\
 #Include strx2.ahk
 #Include AutoCorrect.ahk
+#Include UIA.ahk
