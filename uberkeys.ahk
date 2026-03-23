@@ -506,10 +506,10 @@ clickPicIX(action) {
 	{
 	case "prev":
 		btn := frame.FindElement({Type:'Button',Name:'Previous Page'})
-		btn.Click
+		btn.Click()
 	case "next":
 		btn := frame.FindElement({Type:'Button',Name:'Next Page'})
-		btn.Click
+		btn.Click()
 	case "zoom":
 		group := frame
 					.FindElement({Type:'DataItem',Name:'Change Tile:'})					; First "Change Tile:" label
@@ -519,7 +519,7 @@ clickPicIX(action) {
 		if (combo.WalkTree("p1").Name = "Strip") {
 			combo.Expand()
 			compressed := combo.WaitElement({Name:'Compressed Wave'},5000)				; updated droplist
-			compressed.Click
+			compressed.Click()
 		}
 	case "down":
 		try {
