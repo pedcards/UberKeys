@@ -9,12 +9,14 @@ trayFeatures := Map(
 	"accented","Fix accented words",
 	"datecaps","Fix date capitals",
 	"capslock","Win-CapsLock feature",
-	"pixelmove","LMB+arrow move"
+	"pixelmove","LMB+arrow move",
+	"picix","PicIX hotkeys"
 	)
 flags := Map()
 for key,val in trayFeatures {
 	flags.%key% := true
 }
+flags.picix := false
 
 tray()
 dPath := findDictionary()
@@ -31,7 +33,9 @@ loadKeys()
 ~LButton & Down::MouseMove(0,+1,,'R')
 #HotIf
 
-#HotIf (winID:=WinActive('ahk_exe msedge.exe')) && (WinGetTitle('ahk_id ' winID)~="General|Cardiac")
+#HotIf (flags.picix)
+	&& (winID:=WinActive('ahk_exe msedge.exe')) 
+	&& (WinGetTitle('ahk_id ' winID)~="General|Cardiac")
 ^Left::clickPicIX("prev")
 ^Right::clickPicIX("next")
 ^Up::clickPicIX("zoom")
@@ -177,7 +181,10 @@ tray() {
 	tray.Add("Edit hotstrings",stringEdit)
 	for key,val in trayFeatures {
 		tray.Add(val,toggleFuncs)
-		tray.Check(val)
+		if (flags.%key%)
+			tray.Check(val)
+		else
+			tray.Uncheck(val)
 	}
 	tray.Add()
 	tray.Add("Suspend all functions",toggleSuspend)
